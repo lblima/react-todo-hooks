@@ -17,17 +17,29 @@ function appReducer(state, action) {
     case "delete":
       return state.filter(item => item.id !== action.payload);
     case "complete":
-    return state.map(item => {
-        if (item.id === action.payload) {
-          return {
-            ...item,
-            completed: !item.completed
+      return state.map(item => {
+          if (item.id === action.payload) {
+            return {
+              ...item,
+              completed: !item.completed
+            }
           }
-        }
 
-        return item;
-      }
-     );
+          return item;
+        }
+      );
+    case "change":
+      return state.map(item => {
+          if (item.id === action.payload.id) {
+            return {
+              ...item,
+              text: action.payload.text
+            }
+          }
+
+          return item;
+        }
+      );
     default:
       break;
   }
@@ -61,7 +73,7 @@ export default function AppTodoHook() {
 }
 
 function TodoList({ items }) {
-  return <div style={{ width: "300px" }}>
+  return <div style={{ width: "300px", marginLeft: 'auto', marginRight: 'auto', borderStyle: 'solid', padding: '15px' }}>
           { items.map(item => <TodoItem key={ item.id } {...item} />) }
         </div>
 }
@@ -69,9 +81,9 @@ function TodoList({ items }) {
 function TodoItem({ id, text, completed }) {
   const dispatch = useContext(Context);
   return (
-    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between" }}>
+    <div style={{ display: "flex", flexDirection: "row", justifyContent: "space-between", padding: '3px' }}>
       <input type="checkbox" checked={completed} onChange={() => dispatch({ type: "complete", payload: id })} />
-      <input type="text" defaultValue={text} />
+      <input type="text" defaultValue={text} onChange={(e) => dispatch({ type: "change", payload: { id, text: e.currentTarget.value }})} />
       <button onClick={() => dispatch({ type: "delete", payload: id })}>Delete</button>
     </div>
   )
