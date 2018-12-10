@@ -8,13 +8,13 @@ import './App.css';
 //   const {whyDidYouUpdate} = require('why-did-you-update');
 //   whyDidYouUpdate(React);
 // }
-
+ 
 export default function AppTodoHook() {
     const [state, dispatch] = useReducer(AppReducer, []);
 
     useEffect(() => {
       const raw = localStorage.getItem("data");
-      dispatch({ type: "reset", payload: JSON.parse(raw) });
+      setTimeout(() => dispatch({ type: "reset", payload: JSON.parse(raw) }), 3000);      
     }, []);
     
     useEffect(() => {
